@@ -1,0 +1,716 @@
+{
+  "name": "Trabajo final integrador - Newletter",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ",
+          "mode": "list",
+          "cachedResultName": "Topicos para Newletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "TOPICOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Estado",
+              "lookupValue": "=Pendiente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9a48c4ec-e02a-4e04-b668-14245694b2ae",
+      "name": "Obtener Topico",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        224,
+        96
+      ],
+      "typeVersion": 4.5,
+      "alwaysOutputData": true,
+      "notesInFlow": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JhLeCf6pkXXA7WVf",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Este nodo obtiene el campo \"Topico\" de la planilla, aquellos que tiene estado \"Usar\""
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ",
+          "mode": "list",
+          "cachedResultName": "Topicos para Newletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2027793945,
+          "mode": "list",
+          "cachedResultName": "LINKS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit#gid=2027793945"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Estado",
+              "lookupValue": "=Usar"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a2512857-d841-4330-a89b-677bfc99f946",
+      "name": "Leer Links",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        448,
+        96
+      ],
+      "typeVersion": 4.5,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JhLeCf6pkXXA7WVf",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Este nodo obtiene los links de la planilla, aquellos que tiene estado \"Usar\""
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=data",
+        "name": "={{$('Obtener Topico').item.json.Topico}}.html",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+          "cachedResultName": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "15kgjvP3Ng5jUw3lsFmt1gZM9yPBeDlE8",
+          "mode": "list",
+          "cachedResultName": "Newletter para aprobar",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/15kgjvP3Ng5jUw3lsFmt1gZM9yPBeDlE8"
+        },
+        "options": {}
+      },
+      "id": "b7ff9ae5-9ee7-4c93-b052-ea2d41c6c8e0",
+      "name": "Cargar archivo en google drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        1472,
+        96
+      ],
+      "typeVersion": 3,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "sslZuTlKsGOWzQIZ",
+          "name": "Google Drive account"
+        }
+      },
+      "notes": "Inserta el código de HTML en una la carpeta de Drive \"newsletter para aprobar\""
+    },
+    {
+      "parameters": {
+        "sendTo": "cbazan@visiontressesenta.com.ar",
+        "subject": "=Nueva newsletter {{ $('Obtener Topico').item.json.Date }} con HTML adjunto",
+        "emailType": "text",
+        "message": "=Hola! Se encuentra creada una newletter:  {{ $json.webViewLink }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "c48ef2e9-9a19-4152-86c5-0c3d5bf778d7",
+      "name": "Enviar email a administradores",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        1696,
+        96
+      ],
+      "webhookId": "WEBHOOK_ID_PLACEHOLDER",
+      "typeVersion": 2.1,
+      "notesInFlow": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lAygN5l8wX6VOsC2",
+          "name": "Gmail OAuth2 API"
+        }
+      },
+      "notes": "Este nodo envía correo a administrador informando que se creó el HTML correspondiente. "
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ",
+          "mode": "list",
+          "cachedResultName": "Topicos para Newletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "TOPICOS",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $('Obtener Topico').item.json.Date }}",
+            "Estado": "=Creado"
+          },
+          "matchingColumns": [
+            "Date"
+          ],
+          "schema": [
+            {
+              "id": "Topico",
+              "displayName": "Topico",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "2ef9075b-13f1-49db-be20-585d8089e64a",
+      "name": "Actualizar el status a Creado",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1920,
+        96
+      ],
+      "typeVersion": 4.5,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JhLeCf6pkXXA7WVf",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Actualiza en la planilla el status del tópico a \"Creado\""
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=A. Tu tarea es redactar un borrador de newsletter en formato HTML profesional, con detalles en #152943 #85b643 (colores en codigo hex)\n\nB. Analizando el tema del día desde 3 enfoques diferentes:\n1. Enfoque en coaching ejecutivo (enfoque humano, liderazgo, sucesión).\n2. Enfoque en administración y finanzas (estructura, rentabilidad, patrimonio familiar).\n3. Enfoque en procesos y tecnología (eficiencia, transformación digital, innovación).\n\nC. Para construir este boletín, debes cruzar e integrar obligatoriamente los siguientes tres temas:\n\n[1. TEMA CENTRAL / NOTICIA DEL DÍA]\nProveniente de nuestra lista de tópicos pendientes:\n{{ $('Obtener Topico').item.json.Topic }}\n\n[2. LINKS Y ARTÍCULOS DE ACTUALIDAD COMPLEMENTARIOS]\nAnaliza esta información de contexto extraída de nuestra base de enlaces aprobados para \"USAR\":\n{{ $('Leer Links').item.json.ColumnaDeLinks }}\n\n[3. MARCO TEÓRICO / BIBLIOGRAFÍA CIENTÍFICA]\nUtiliza estos conceptos y fundamentos de nuestra biblioteca privada aprobados para \"USAR\":\n{{ $('Leer Bibliografía').item.json.ColumnaDeBibliografia }}\n\nD. Instrucciones de Redacción:\n- Contrasta fuertemente la actualidad (puntos 1 y 2) con el sustento científico (punto 3).\n- Divide el cuerpo en tres bloques bien diferenciados, correspondientes a los 3 enfoques.\n- Mantén un tono corporativo, humano, analítico y de autoridad.\n- Devuelve el resultado estructurado estrictamente en código HTML limpio (con etiquetas <p>, <h2>, <strong>, etc.) listo para ser enviado por correo.\n- RESTRICCIÓN ABSOLUTA DE FORMATO: Devuelve ÚNICAMENTE el código HTML limpio. Está completamente prohibido incluir textos introductorios, saludos, notas explicativas o conclusiones fuera del HTML. \n- NO utilices bloques de código Markdown (evita poner ```html al principio o ``` al final). La respuesta debe empezar directamente con la primera etiqueta HTML (por ejemplo, <div style=\"...\"> o <h2>) y terminar con la última etiqueta."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        96
+      ],
+      "id": "d2ce0f00-6fb3-42b7-a817-88e7dbf280fc",
+      "name": "Promt a Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "T9jh2HXIB2Kzthfu",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "notes": "En este nodo Gemini cruza la información obtenida en los 3 nodos anteriores; analizando el 'Topico' respecto a los Links y Bibliografía."
+    },
+    {
+      "parameters": {},
+      "id": "206e5e32-20c3-4402-9ec6-c54b6907b0c9",
+      "name": "Crear newsletter Manual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        0,
+        96
+      ],
+      "typeVersion": 1,
+      "notes": "🚀 START HERE: Click to generate newsletters from pending topics in your Google Sheet"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ",
+          "mode": "list",
+          "cachedResultName": "Topicos para Newletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 171185725,
+          "mode": "list",
+          "cachedResultName": "CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit#gid=171185725"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Estado": "Enviado",
+            "Fecha de envío": "={{ $now.setZone('America/Argentina/Buenos_Aires').format('dd/MM/yyyy HH:mm') }}",
+            "Email": "{{ $json.Email }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tema",
+              "displayName": "Tema",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nombre del cliente",
+              "displayName": "Nombre del cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha de creación",
+              "displayName": "Fecha de creación",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha de envío",
+              "displayName": "Fecha de envío",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Titulo",
+              "displayName": "Titulo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Body",
+              "displayName": "Body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "4bea3f37-3ce4-4327-81f6-0ceaace4eb43",
+      "name": "Actualizar status en CRM",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        736,
+        320
+      ],
+      "typeVersion": 4.5,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JhLeCf6pkXXA7WVf",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Este nodo actualiza el campo \"Estado\" a \"enviado\" de aquellos clientes a los cuales les envió la newletter"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "={{ $json.Titulo }}",
+        "message": "={{ $json.Body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "06b7f541-a172-4148-8da7-4c488b731c62",
+      "name": "Enviar email a clientes",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        448,
+        320
+      ],
+      "webhookId": "CLIENT_WEBHOOK_ID_PLACEHOLDER",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "lAygN5l8wX6VOsC2",
+          "name": "Gmail OAuth2 API"
+        }
+      },
+      "notes": "Este nodo envía a las direcciones de correo de la columna \"Email\" con el asunto del Tópico y en el cuerpo del correo ingresa el campo \"Body\"."
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "monthsInterval": 3
+            }
+          ]
+        }
+      },
+      "id": "8e876dc8-7d32-4caa-814b-05e4072e77bd",
+      "name": "Ejecución Programada",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -32,
+        320
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ",
+          "mode": "list",
+          "cachedResultName": "Topicos para Newletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1079525871,
+          "mode": "list",
+          "cachedResultName": "BIBLIOGRAFÍA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit#gid=1079525871"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Estado",
+              "lookupValue": "=Usar"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f495fc95-b8cd-443c-8c51-bbccad885712",
+      "name": "Leer Bibliografía",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        672,
+        96
+      ],
+      "typeVersion": 4.5,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JhLeCf6pkXXA7WVf",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Este nodo obtiene la Bibliografía de la planilla, aquellos que tiene estado \"Usar\""
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Obtenemos el primer elemento que viene de Gemini de forma segura\nconst inputItem = $input.first().json;\nlet htmlContent = \"\";\n\n// 2. Extraemos el texto intentando primero la ruta exacta de Gemini\nif (inputItem.content && inputItem.content.parts && inputItem.content.parts[0]) {\n  htmlContent = inputItem.content.parts[0].text;\n} else {\n  // Rutas alternativas por si n8n o el modelo cambian la estructura\n  htmlContent = inputItem.text || inputItem.output;\n}\n\n// Validación de seguridad por si el contenido está vacío\nif (!htmlContent) {\n  throw new Error(\"No se pudo extraer el texto HTML de Gemini. Verifica los datos que entrega el nodo anterior.\");\n}\n\n// 3. Generamos el nombre del archivo con la fecha actual\nconst currentDate = new Date().toISOString().split('T')[0];\nconst filename = `document_${currentDate}.html`;\n\n// 4. Convertimos el string a buffer binario para subirlo a Google Drive\nconst buffer = Buffer.from(htmlContent, 'utf8');\n\nreturn [{\n  json: {\n    fileName: filename,\n    mimeType: 'text/html'\n  },\n  binary: {\n    data: buffer\n  }\n}];"
+      },
+      "id": "d589979d-7938-4987-9e95-00392414d357",
+      "name": "Transforma en HTML",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1248,
+        96
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ",
+          "mode": "list",
+          "cachedResultName": "Topicos para Newletter",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 171185725,
+          "mode": "list",
+          "cachedResultName": "CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12p67-nRnS8j0Pkn0aIRmX4RRqCkuNHJ7dvyCN7KJRsQ/edit#gid=171185725"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Estado",
+              "lookupValue": "Pendiente"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d7cf3c8d-df49-40a4-8e5b-bd9ad3f40078",
+      "name": "Obtener Clientes Pendientes de envio",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        192,
+        320
+      ],
+      "typeVersion": 4.5,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "JhLeCf6pkXXA7WVf",
+          "name": "Google Sheets OAuth2 API"
+        }
+      },
+      "notes": "Este nodo obtiene todas las filas de la hoja CRM que tengas estado \"Pendiente\""
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Obtener Topico": {
+      "main": [
+        [
+          {
+            "node": "Leer Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Links": {
+      "main": [
+        [
+          {
+            "node": "Leer Bibliografía",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cargar archivo en google drive": {
+      "main": [
+        [
+          {
+            "node": "Enviar email a administradores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar email a administradores": {
+      "main": [
+        [
+          {
+            "node": "Actualizar el status a Creado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Promt a Gemini": {
+      "main": [
+        [
+          {
+            "node": "Transforma en HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crear newsletter Manual": {
+      "main": [
+        [
+          {
+            "node": "Obtener Topico",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar email a clientes": {
+      "main": [
+        [
+          {
+            "node": "Actualizar status en CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ejecución Programada": {
+      "main": [
+        [
+          {
+            "node": "Obtener Clientes Pendientes de envio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer Bibliografía": {
+      "main": [
+        [
+          {
+            "node": "Promt a Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transforma en HTML": {
+      "main": [
+        [
+          {
+            "node": "Cargar archivo en google drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener Clientes Pendientes de envio": {
+      "main": [
+        [
+          {
+            "node": "Enviar email a clientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "882073e8-e8b9-45af-b2bb-f2c9b0bfc067",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3879ac27e43147b67e22c545e656fe89e353196043f67760fa1310af9bf01524"
+  },
+  "nodeGroups": [],
+  "id": "OfFbcVuKRt7VgRbL",
+  "tags": []
+}
